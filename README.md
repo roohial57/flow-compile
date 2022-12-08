@@ -1,4 +1,4 @@
-# flowchart-compiler
+# vue-flow-compile
 
 ## Project setup
 ```
