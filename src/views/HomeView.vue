@@ -11,7 +11,7 @@ import ChartEditor from '@/components/ChartEditor.vue'
 export default {
   name: 'HomeView',
   components: {
-    ChartEditor
+    'chart-editor':ChartEditor
   }
 }
 </script>

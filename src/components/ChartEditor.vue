@@ -1,56 +1,118 @@
 <template>
   <div class="flow-nav">
-    <v-g-editor  ref="editor1" height="700" width="800"> aaaaaaaaaaa
-      <flow :data="data" height="700" width="800" ref="flow1" />
-    </v-g-editor>
+    <div id="chart1"></div>
+    <context-menu ref="contextMenu1" @add="showAddNode" />
+    <select-node-type ref="selectNodeType1" @select="addNode" />
   </div>
 </template>
 
 <script>
-import VGEditor, { Flow } from 'vg-editor'
+import AntVGraph from "./AntVGraph.js";
+import ContextMenu from './ContextMenu.vue'
+import SelectNodeType from './SelectNodeType.vue'
 const data = {
-  nodes: [{
-    type: 'node',
-    size: '70*70',
-    shape: 'flow-circle',
-    color: '#FA8C16',
-    label: 'Start',
-    x: 55,
-    y: 55,
-    id: 'ea1184e8',
-    index: 0,
-  }, {
-    type: 'node',
-    size: '70*70',
-    shape: 'flow-circle',
-    color: '#FA8C16',
-    label: 'End',
-    x: 55,
-    y: 255,
-    id: '481fbb1a',
-    index: 2,
-  }],
-  edges: [{
-    source: 'ea1184e8',
-    sourceAnchor: 2,
-    target: '481fbb1a',
-    targetAnchor: 0,
-    id: '7989ac70',
-    index: 1,
-  }],
+  nodes: [
+    {
+      id: '0',
+      label: '000',
+      type: 'circle',
+    },
+    {
+      id: '1',
+      label: '1',
+    },
+    {
+      id: '2',
+      label: '2',
+    },
+    {
+      id: '3',
+      label: '3',
+    },
+    {
+      id: '4',
+      label: '4',
+    },
+    {
+      id: '5',
+      label: '5',
+    }
+  ],
+  edges: [
+    {
+      source: '0',
+      target: '1',
+    },
+    {
+      source: '1',
+      target: '2',
+    },
+    {
+      source: '2',
+      target: '3',
+    },
+    {
+      source: '3',
+      target: '4',
+    },
+    {
+      source: '4',
+      target: '5',
+    },
+  ],
 };
 export default {
   name: 'CharEditor',
+  components: { ContextMenu, SelectNodeType },
   data() {
-    return { data }
+    return {
+      data,
+      graph: null
+    }
   },
-  components: { VGEditor, Flow },
-  methods:{},
-  mounted(){
-    setTimeout(() => {
-      document.getElementById('canvas_1').height=700;
-      document.getElementById('canvas_1').width=800;
-    }, 3000);
+  methods: {
+    showAddNode(source) {
+      this.$refs.selectNodeType1.show(source);
+    },
+    addNode(nodeType, source) {
+      const id = source._cfg.id;
+      let node = this.data.nodes.find(x => x.id == id);
+      let edge = this.data.edges.find(x => x.source == id);
+      let newNode = {
+        id: '15',
+        label: '15',
+      };
+      this.data.nodes.push(newNode);
+      this.data.edges.push({
+        source: '15',
+        target: edge.target,
+      });
+      edge.target=newNode.id;
+    this.graph.data(data);
+    this.graph.render();
+    }
+  },
+  mounted() {
+    this.graph = AntVGraph('chart1', data);
+    this.graph.data(data);
+    this.graph.render();
+
+    this.graph.on('node:click', (ev) => {
+      const shape = ev.target;
+      const item = ev.item;
+      if (item) {
+        const type = item.getType();
+      }
+      this.$refs.contextMenu1.show(item, ev.clientX, ev.clientY)
+    });
+    this.graph.on('edge:click', (ev) => {
+      alert('')
+      const shape = ev.target;
+      const item = ev.item;
+      if (item) {
+        const type = item.getType();
+      }
+    });
   }
 }
 </script> 
@@ -58,10 +120,5 @@ export default {
 .flow-nav {
   /* width: 800px;
   height: 700px */
-}
-canvas#canvas_1 {
-    height: 700px !important;
-    width: 800px !important;
-    border: 1px solid;
 }
 </style>
