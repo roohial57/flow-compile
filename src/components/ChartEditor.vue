@@ -10,63 +10,11 @@
 import AntVGraph from "./AntVGraph.js";
 import ContextMenu from './ContextMenu.vue'
 import SelectNodeType from './SelectNodeType.vue'
-const data = {
-  nodes: [
-    {
-      id: '0',
-      label: '000',
-      type: 'circle',
-    },
-    {
-      id: '1',
-      label: '1',
-    },
-    {
-      id: '2',
-      label: '2',
-    },
-    {
-      id: '3',
-      label: '3',
-    },
-    {
-      id: '4',
-      label: '4',
-    },
-    {
-      id: '5',
-      label: '5',
-    }
-  ],
-  edges: [
-    {
-      source: '0',
-      target: '1',
-    },
-    {
-      source: '1',
-      target: '2',
-    },
-    {
-      source: '2',
-      target: '3',
-    },
-    {
-      source: '3',
-      target: '4',
-    },
-    {
-      source: '4',
-      target: '5',
-    },
-  ],
-};
 export default {
   name: 'CharEditor',
   components: { ContextMenu, SelectNodeType },
   data() {
     return {
-      data,
       graph: null
     }
   },
@@ -76,28 +24,13 @@ export default {
     },
     addNode(nodeType, source) {
       const id = source._cfg.id;
-      let node = this.data.nodes.find(x => x.id == id);
-      let edge = this.data.edges.find(x => x.source == id);
-      let newNode = {
-        id: '15',
-        label: '15',
-      };
-      this.data.nodes.push(newNode);
-      this.data.edges.push({
-        source: '15',
-        target: edge.target,
-      });
-      edge.target=newNode.id;
-    this.graph.data(data);
-    this.graph.render();
+      AntVGraph.addNode(nodeType, id);
     }
   },
   mounted() {
-    this.graph = AntVGraph('chart1', data);
-    this.graph.data(data);
-    this.graph.render();
+    AntVGraph.init('chart1');
 
-    this.graph.on('node:click', (ev) => {
+    AntVGraph.graph.on('node:click', (ev) => {
       const shape = ev.target;
       const item = ev.item;
       if (item) {
@@ -105,7 +38,7 @@ export default {
       }
       this.$refs.contextMenu1.show(item, ev.clientX, ev.clientY)
     });
-    this.graph.on('edge:click', (ev) => {
+    AntVGraph.graph.on('edge:click', (ev) => {
       alert('')
       const shape = ev.target;
       const item = ev.item;
