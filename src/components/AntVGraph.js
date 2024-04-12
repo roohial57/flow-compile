@@ -79,14 +79,15 @@ export default {
     },
     getNodeType(item) {
         return item._cfg.model.nodeType;
-        switch (item._cfg.model.type) {
-            case 'circle':
-                return NodeType.Start;
-            case 'rect':
-                return NodeType.Operation;
-            case 'diamond':
-                return NodeType.Condition;
-        }
+    },
+    getId(item) {
+        return item._cfg.id;
+    },
+    getSourceOfEdge(edge) {
+        return edge._cfg.source;
+    },
+    getEdges(edge) {
+        return edge._cfg.edges;
     },
     addNode(nodeType, parentId, branchNo, text) {
         let node = this.data.nodes.find(x => x.id == parentId);
