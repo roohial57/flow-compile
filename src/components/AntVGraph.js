@@ -150,8 +150,11 @@ export default {
     getSourceOfEdge(edge) {
         return edge._cfg.source;
     },
-    getEdges(edge) {
-        return edge._cfg.edges;
+    getEdges(node) {
+        return node._cfg.edges;
+    },
+    getNodes() {
+        return this.graph.cfg.nodes;
     },
     addNode(nodeType, parentId, branchNo, text) {
         let node = this.data.nodes.find(x => x.id == parentId);

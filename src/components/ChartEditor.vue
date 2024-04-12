@@ -3,6 +3,7 @@
     <div id="chart1"></div>
     <context-menu ref="contextMenu1" @add="showAddNode" />
     <select-node-type ref="selectNodeType1" @select="addNode" />
+    <operation ref="operation1" />
   </div>
 </template>
 
@@ -10,10 +11,11 @@
 import AntVGraph from "./AntVGraph.js";
 import ContextMenu from './ContextMenu.vue'
 import SelectNodeType from './SelectNodeType.vue'
+import Operation from './Operation.vue'
 import { NodeType } from '@/enum.js';
 export default {
   name: 'CharEditor',
-  components: { ContextMenu, SelectNodeType },
+  components: { ContextMenu, SelectNodeType, Operation },
   data() {
     return {
       graph: null
@@ -29,16 +31,18 @@ export default {
     },
     showNodeMenu(ev) {
       const item = ev.item;
-      let contextMenuItems = [
-        {
+      let contextMenuItems = []
+      if (AntVGraph.getNodeType(item).canEdit) {
+        contextMenuItems.push({
           icon: "edit",
           text: 'ویرایش',
           divider: true,
           click: () => {
-            alert('Option0!')
+            this.$refs.operation1.show();
           }
         }
-      ];
+        );
+      }
       switch (AntVGraph.getNodeType(item)) {
         case NodeType.Operation:
         case NodeType.Start:
@@ -87,7 +91,7 @@ export default {
   },
   mounted() {
     AntVGraph.init('chart1');
-
+    this.addNode(NodeType.Operation, { source: AntVGraph.getNodes()[0], branchNo: 0 })
     AntVGraph.graph.on('node:click', this.showNodeMenu);
     AntVGraph.graph.on('edge:click', this.showEdgeMenu);
   }

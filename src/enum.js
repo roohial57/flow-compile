@@ -5,7 +5,7 @@ const toArray = function () {
 export const NodeType = Object.freeze({
   Start: { value: 'Start', title: "شروع" },
   End: { value: 'End', title: "پایان" },
-  Operation: { value: 'Operation', title: "عملیات", canAdd:true },
-  Condition: { value: 'Condition', title: "شرط", canAdd:true },
-  getValues:toArray
+  Operation: { value: 'Operation', title: "عملیات", canAdd: true, canEdit: true, },
+  Condition: { value: 'Condition', title: "شرط", canAdd: true, canEdit: true },
+  getValues: toArray
 });
