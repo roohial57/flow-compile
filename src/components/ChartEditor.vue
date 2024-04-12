@@ -24,8 +24,8 @@ export default {
       this.$refs.selectNodeType1.show(data);
     },
     addNode(nodeType, data) {
-      const id = data.source._cfg.id;
-      AntVGraph.addNode(nodeType, id,data.branchNo);
+      const id = AntVGraph.getId(data.source);
+      AntVGraph.addNode(nodeType, id, data.branchNo);
     },
     showNodeMenu(ev) {
       const item = ev.item;
@@ -47,7 +47,7 @@ export default {
               icon: 'plus',
               text: 'اضافه کردن فرزند',
               click: () => {
-                this.showAddNode({source:item,branchNo:0})
+                this.showAddNode({ source: item, branchNo: 0 })
               }
             });
           break;
@@ -56,28 +56,29 @@ export default {
             icon: 'plus',
             text: 'اضافه کردن فرزند true',
             click: () => {
-              this.showAddNode({source:item,branchNo:0})
+              this.showAddNode({ source: item, branchNo: 0 })
             }
           },
             {
               icon: 'plus',
               text: 'اضافه کردن فرزند false',
               click: () => {
-                this.showAddNode({source:item,branchNo:1})
+                this.showAddNode({ source: item, branchNo: 1 })
               }
             });
       }
       this.$refs.contextMenu1.show(contextMenuItems, ev.clientX, ev.clientY)
     },
     showEdgeMenu(ev) {
-      const item = ev.source;
+      const item = AntVGraph.getSourceOfEdge(ev.item);
+      const branchNo = AntVGraph.getEdges(item).filter(x => AntVGraph.getSourceOfEdge(x) == item).findIndex(x => x == ev.item);
       let contextMenuItems = [
         {
           icon: 'plus',
           text: 'اضافه کردن فرزند',
           divider: true,
           click: () => {
-            this.showAddNode({source:item,branchNo:0})
+            this.showAddNode({ source: item, branchNo: branchNo })
           }
         }
       ];
