@@ -60,7 +60,7 @@ export default {
                 type: 'polyline',
                 style: {
                     endArrow: {
-                        path: 'M 0,0 L 8,4 L 8,-4 Z',
+                        path: 'M 0,0 L 6,3 L 6,-3 Z',
                         fill: '#e2e2e2',
                     },
                 },
@@ -75,11 +75,11 @@ export default {
                 graph.changeSize(this.container.scrollWidth, this.container.scrollHeight);
             };
     },
-    addNode(nodeType, parentId) {
+    addNode(nodeType, parentId,text) {
         let node = this.data.nodes.find(x => x.id == parentId);
         let edge = this.data.edges.find(x => x.source == parentId);
         let newId = this.nodeCount + '';
-        let newNode = this.newNode(nodeType, newId);
+        let newNode = this.newNode(nodeType, newId,text);
         this.data.nodes.push(newNode);
         let edges = this.newEdges(nodeType, newId, edge.target);
         this.data.edges.push(...edges);
@@ -88,11 +88,11 @@ export default {
         this.graph.render();
         this.nodeCount = this.data.nodes.length;
     },
-    newNode(nodeType, newId) {
+    newNode(nodeType, newId,text) {
         let node = {
             type: 'rect',
             id: newId,
-            label: newId,
+            label: text||newId,
             anchorPoints: [
                 [0.5, 0],
                 [0.5, 0.5]
@@ -113,13 +113,13 @@ export default {
             }];
         switch (nodeType) {
             case NodeType.Condition:
-                edges[0].label="True";
-                edges[0].type="line";
+                edges[0].label = "True";
+                edges[0].type = "line";
                 edges.push({
                     source: newId,
                     target: targetId,
-                    label:'False',
-                    style:{offset:8}
+                    label: 'False',
+                    style: { offset: 8 },
                 });
                 break;
         }

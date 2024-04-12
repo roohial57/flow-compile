@@ -1,7 +1,7 @@
 <template>
   <div>
     <vs-popup class="holamundo" title="Lorem ipsum dolor sit amet" :active.sync="visible">
-      <p v-for="(source,index) of NodeType" :key="index" @click="select(source)">{{ source.title }}</p>
+      <p v-for="(nodeType,index) of NodeType" :key="index" @click="select(nodeType)">{{ nodeType.title }}</p>
     </vs-popup>
   </div>
 </template>
