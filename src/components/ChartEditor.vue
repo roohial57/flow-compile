@@ -10,6 +10,7 @@
 import AntVGraph from "./AntVGraph.js";
 import ContextMenu from './ContextMenu.vue'
 import SelectNodeType from './SelectNodeType.vue'
+import { NodeType } from '@/enum.js';
 export default {
   name: 'CharEditor',
   components: { ContextMenu, SelectNodeType },
@@ -19,33 +20,75 @@ export default {
     }
   },
   methods: {
-    showAddNode(source) {
-      this.$refs.selectNodeType1.show(source);
+    showAddNode(data) {
+      this.$refs.selectNodeType1.show(data);
     },
-    addNode(nodeType, source) {
-      const id = source._cfg.id;
-      AntVGraph.addNode(nodeType, id);
+    addNode(nodeType, data) {
+      const id = data.source._cfg.id;
+      AntVGraph.addNode(nodeType, id,data.branchNo);
+    },
+    showNodeMenu(ev) {
+      const item = ev.item;
+      let contextMenuItems = [
+        {
+          icon: "edit",
+          text: 'ویرایش',
+          divider: true,
+          click: () => {
+            alert('Option0!')
+          }
+        }
+      ];
+      switch (AntVGraph.getNodeType(item)) {
+        case NodeType.Operation:
+        case NodeType.Start:
+          contextMenuItems.push(
+            {
+              icon: 'plus',
+              text: 'اضافه کردن فرزند',
+              click: () => {
+                this.showAddNode({source:item,branchNo:0})
+              }
+            });
+          break;
+        case NodeType.Condition:
+          contextMenuItems.push({
+            icon: 'plus',
+            text: 'اضافه کردن فرزند true',
+            click: () => {
+              this.showAddNode({source:item,branchNo:0})
+            }
+          },
+            {
+              icon: 'plus',
+              text: 'اضافه کردن فرزند false',
+              click: () => {
+                this.showAddNode({source:item,branchNo:1})
+              }
+            });
+      }
+      this.$refs.contextMenu1.show(contextMenuItems, ev.clientX, ev.clientY)
+    },
+    showEdgeMenu(ev) {
+      const item = ev.source;
+      let contextMenuItems = [
+        {
+          icon: 'plus',
+          text: 'اضافه کردن فرزند',
+          divider: true,
+          click: () => {
+            this.showAddNode({source:item,branchNo:0})
+          }
+        }
+      ];
+      this.$refs.contextMenu1.show(contextMenuItems, ev.clientX, ev.clientY)
     }
   },
   mounted() {
     AntVGraph.init('chart1');
 
-    AntVGraph.graph.on('node:click', (ev) => {
-      const shape = ev.target;
-      const item = ev.item;
-      if (item) {
-        const type = item.getType();
-      }
-      this.$refs.contextMenu1.show(item, ev.clientX, ev.clientY)
-    });
-    AntVGraph.graph.on('edge:click', (ev) => {
-      alert('')
-      const shape = ev.target;
-      const item = ev.item;
-      if (item) {
-        const type = item.getType();
-      }
-    });
+    AntVGraph.graph.on('node:click', this.showNodeMenu);
+    AntVGraph.graph.on('edge:click', this.showEdgeMenu);
   }
 }
 </script> 

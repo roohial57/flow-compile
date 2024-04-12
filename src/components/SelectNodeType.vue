@@ -1,7 +1,7 @@
 <template>
   <div>
     <vs-popup class="holamundo" title="Lorem ipsum dolor sit amet" :active.sync="visible">
-      <p v-for="(source,index) of NodeType" :key="index" @click="select(source)">{{ source.title }}</p>
+      <p v-for="(nodeType,index) of NodeType" :key="index" @click="select(nodeType)" v-if="nodeType.canAdd">{{ nodeType.title }}</p>
     </vs-popup>
   </div>
 </template>
@@ -15,19 +15,19 @@ export default {
     return {
       NodeType,
       visible: false,
-      source:null
+      data:null
     }
   },
   computed:{
   },
   methods: {
-    show(source) {
-      this.source=source;
+    show(data) {
+      this.data=data;
       this.visible = true;
     },
     select(value) {
       this.visible = false;
-      this.$emit("select",value,this.source)
+      this.$emit("select",value,this.data)
     },
   },
   mounted() {
