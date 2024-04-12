@@ -3,7 +3,9 @@ const toArray = function () {
   return Object.values(this);
 };
 export const NodeType = Object.freeze({
-  Operation: { value: 'Operation', title: "عملیات" },
-  Condition: { value: 'Condition', title: "شرط" },
+  Start: { value: 'Start', title: "شروع" },
+  End: { value: 'End', title: "پایان" },
+  Operation: { value: 'Operation', title: "عملیات", canAdd:true },
+  Condition: { value: 'Condition', title: "شرط", canAdd:true },
   getValues:toArray
 });

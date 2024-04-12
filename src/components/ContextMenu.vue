@@ -14,39 +14,17 @@ export default {
   components: {},
   data() {
     return {
-      source:null
     }
   },
   methods: {
-    show(source,x, y) {
-      this.source=source;
+    show(items,x, y) {
       var params = {
         pageX: x,
         pageY: y,
       };
       setTimeout(() => {
-        this.showContextMenu(params);
+        this.$refs.kiContext.show(params, items);
       }, 1);
-    },
-    showContextMenu(event) {
-      let items = [
-        {
-          icon: "edit",
-          text: 'ویرایش',
-          click: () => {
-            alert('Option0!')
-          }
-        },
-        {
-          icon: 'plus',
-          text: 'اضافه کردن فرزند',
-          divider: true,
-          click: () => {
-            this.$emit("add",this.source)
-          }
-        }
-      ];
-      this.$refs.kiContext.show(event, items);
     },
     hideContextMenu() {
       this.$refs.kiContext.hide();

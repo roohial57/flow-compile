@@ -12,11 +12,13 @@ export default {
                 id: '0',
                 label: 'Start',
                 type: 'circle',
+                nodeType: NodeType.Start
             },
             {
                 id: '1',
                 label: 'End',
                 type: 'circle',
+                nodeType: NodeType.End
             }
         ],
         edges: [
@@ -75,11 +77,22 @@ export default {
                 graph.changeSize(this.container.scrollWidth, this.container.scrollHeight);
             };
     },
-    addNode(nodeType, parentId,text) {
+    getNodeType(item) {
+        return item._cfg.model.nodeType;
+        switch (item._cfg.model.type) {
+            case 'circle':
+                return NodeType.Start;
+            case 'rect':
+                return NodeType.Operation;
+            case 'diamond':
+                return NodeType.Condition;
+        }
+    },
+    addNode(nodeType, parentId, branchNo, text) {
         let node = this.data.nodes.find(x => x.id == parentId);
-        let edge = this.data.edges.find(x => x.source == parentId);
+        let edge = this.data.edges.filter(x => x.source == parentId)[branchNo || 0];
         let newId = this.nodeCount + '';
-        let newNode = this.newNode(nodeType, newId,text);
+        let newNode = this.newNode(nodeType, newId, text);
         this.data.nodes.push(newNode);
         let edges = this.newEdges(nodeType, newId, edge.target);
         this.data.edges.push(...edges);
@@ -88,11 +101,12 @@ export default {
         this.graph.render();
         this.nodeCount = this.data.nodes.length;
     },
-    newNode(nodeType, newId,text) {
+    newNode(nodeType, newId, text) {
         let node = {
             type: 'rect',
             id: newId,
-            label: text||newId,
+            nodeType: nodeType,
+            label: text || newId,
             anchorPoints: [
                 [0.5, 0],
                 [0.5, 0.5]
