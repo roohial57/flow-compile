@@ -17,7 +17,9 @@ export default {
     }
   },
   methods: {
-    show(items,x, y) {
+    show(items, x, y) {
+      if (!items.length)
+        return
       var params = {
         pageX: x,
         pageY: y,
