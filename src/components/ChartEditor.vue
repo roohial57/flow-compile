@@ -3,7 +3,7 @@
     <div id="chart1"></div>
     <context-menu ref="contextMenu1" @add="showAddNode" />
     <select-node-type ref="selectNodeType1" @select="addNode" />
-    <operation ref="operation1" />
+    <operation-editor ref="operation1" />
   </div>
 </template>
 
@@ -11,11 +11,11 @@
 import AntVGraph from "./AntVGraph.js";
 import ContextMenu from './ContextMenu.vue'
 import SelectNodeType from './SelectNodeType.vue'
-import Operation from './Operation.vue'
+import OperationEditor from './OperationEditor.vue'
 import { NodeType } from '@/enum.js';
 export default {
   name: 'CharEditor',
-  components: { ContextMenu, SelectNodeType, Operation },
+  components: { ContextMenu, SelectNodeType, OperationEditor },
   data() {
     return {
       graph: null
@@ -76,6 +76,8 @@ export default {
     showEdgeMenu(ev) {
       const item = AntVGraph.getSourceOfEdge(ev.item);
       const branchNo = AntVGraph.getEdges(item).filter(x => AntVGraph.getSourceOfEdge(x) == item).findIndex(x => x == ev.item);
+      this.showAddNode({ source: item, branchNo: branchNo });
+      return;
       let contextMenuItems = [
         {
           icon: 'plus',
