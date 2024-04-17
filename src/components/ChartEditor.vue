@@ -3,19 +3,25 @@
     <div id="chart1"></div>
     <context-menu ref="contextMenu1" @add="showAddNode" />
     <select-node-type ref="selectNodeType1" @select="addNode" />
-    <operation-editor ref="operation1" />
+    <operation-editor ref="operationEditor1" />
+    <declaration-editor ref="declarationEditor1" />
+    <input-editor ref="inputEditor1" />
+    <output-editor ref="outputEditor" />
   </div>
 </template>
 
 <script>
-import AntVGraph from "./AntVGraph.js";
+import AntVGraph from "./ant-graph/AntVGraph.js";
 import ContextMenu from './ContextMenu.vue'
 import SelectNodeType from './SelectNodeType.vue'
-import OperationEditor from './OperationEditor.vue'
+import OperationEditor from './editors/OperationEditor.vue'
+import DeclarationEditor from './editors/DeclarationEditor.vue'
+import InputEditor from './editors/InputEditor.vue'
+import OutputEditor from './editors/OutputEditor.vue'
 import { NodeType } from '@/enum.js';
 export default {
   name: 'CharEditor',
-  components: { ContextMenu, SelectNodeType, OperationEditor },
+  components: { ContextMenu, SelectNodeType, OperationEditor, DeclarationEditor, InputEditor, OutputEditor },
   data() {
     return {
       graph: null
@@ -38,7 +44,11 @@ export default {
           text: 'ویرایش',
           divider: true,
           click: () => {
-            this.$refs.operation1.show();
+            switch (AntVGraph.getNodeType(item)) {
+              case NodeType.Declaration:
+                this.$refs.declarationEditor1.show();
+                break;
+            }
           }
         }
         );
@@ -93,7 +103,7 @@ export default {
   },
   mounted() {
     AntVGraph.init('chart1');
-    this.addNode(NodeType.Operation, { source: AntVGraph.getNodes()[0], branchNo: 0 })
+    this.addNode(NodeType.Declaration, { source: AntVGraph.getNodes()[0], branchNo: 0 })
     AntVGraph.graph.on('node:click', this.showNodeMenu);
     AntVGraph.graph.on('edge:click', this.showEdgeMenu);
   }
