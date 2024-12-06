@@ -4,14 +4,14 @@
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
+<script lang="ts">
 import ChartEditor from '@/components/ChartEditor.vue'
+import { Component, Vue } from 'vue-property-decorator';
 
-export default {
-  name: 'HomeView',
+@Component({
   components: {
     'chart-editor':ChartEditor
-  }
-}
+  },
+})
+export default class HomeView extends Vue {}
 </script>

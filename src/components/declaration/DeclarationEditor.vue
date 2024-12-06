@@ -4,8 +4,8 @@
       Type:
       <v-select label="Select" :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"></v-select>
       <select v-model="selectedType">
-        <option v-for="option in VariableType" :value="option.value">
-          {{ option.title }}
+        <option v-for="option in VariableType" :value="option">
+          {{ option }}
         </option>
       </select>
       <br />
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { VariableType } from '@/enum.js';
+import { VariableType } from './VariableType.ts';
 export default {
   name: 'operation',
   components: {},
@@ -27,7 +27,7 @@ export default {
       nodeId: null,
       VariableType,
       visible: false,
-      selectedType: Object.values(VariableType)[0].value,
+      selectedType: VariableType.Number,
       typeName: '',
     }
   },

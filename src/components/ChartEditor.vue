@@ -14,10 +14,10 @@
 import AntVGraph from "./ant-graph/AntVGraph.js";
 import ContextMenu from './ContextMenu.vue'
 import SelectNodeType from './SelectNodeType.vue'
-import OperationEditor from './editors/OperationEditor.vue'
-import DeclarationEditor from './editors/DeclarationEditor.vue'
-import InputEditor from './editors/InputEditor.vue'
-import OutputEditor from './editors/OutputEditor.vue'
+import OperationEditor from './operation/OperationEditor.vue'
+import DeclarationEditor from './declaration/DeclarationEditor.vue'
+import InputEditor from './input/InputEditor.vue'
+import OutputEditor from './output/OutputEditor.vue'
 import { NodeType } from '@/enum.js';
 export default {
   name: 'CharEditor',
