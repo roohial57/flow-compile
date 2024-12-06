@@ -4,7 +4,7 @@
     <context-menu ref="contextMenu1" @add="showAddNode" />
     <select-node-type ref="selectNodeType1" @select="addNode" />
     <operation-editor ref="operationEditor1" />
-    <declaration-editor ref="declarationEditor1" />
+    <declaration-editor ref="declarationEditor1" @save="saveDeclareation" />
     <input-editor ref="inputEditor1" />
     <output-editor ref="outputEditor" />
   </div>
@@ -46,7 +46,7 @@ export default {
           click: () => {
             switch (AntVGraph.getNodeType(item)) {
               case NodeType.Declaration:
-                this.$refs.declarationEditor1.show();
+                this.$refs.declarationEditor1.show(item._cfg.id);
                 break;
             }
           }
@@ -99,6 +99,9 @@ export default {
         }
       ];
       this.$refs.contextMenu1.show(contextMenuItems, ev.clientX, ev.clientY)
+    },
+    saveDeclareation(data) {
+      console.log('object :>> ', data);
     }
   },
   mounted() {
