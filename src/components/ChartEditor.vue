@@ -4,42 +4,51 @@
     <context-menu ref="contextMenu1" @add="showAddNode" />
     <select-node-type ref="selectNodeType1" @select="addNode" />
     <operation-editor ref="operationEditor1" />
-    <declaration-editor ref="declarationEditor1" @save="saveDeclareation" />
+    <declaration-editor ref="declarationEditor1" @save="saveDeclaration" />
     <input-editor ref="inputEditor1" />
     <output-editor ref="outputEditor" />
   </div>
 </template>
 
-<script>
-import { VariableType } from './declaration/VariableType.ts';
-import { Variable } from './declaration/Variable.ts';
-import AntVGraph from "./ant-graph/AntVGraph.js";
-import ContextMenu from './ContextMenu.vue'
-import SelectNodeType from './SelectNodeType.vue'
-import OperationEditor from './operation/OperationEditor.vue'
-import DeclarationEditor from './declaration/DeclarationEditor.vue'
-import InputEditor from './input/InputEditor.vue'
-import OutputEditor from './output/OutputEditor.vue'
-import { NodeType } from '@/enum.js';
-export default {
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { VariableType } from './declaration/VariableType';
+import { Variable } from './declaration/Variable';
+import AntVGraph from "./ant-graph/AntVGraph";
+import ContextMenu from './ContextMenu.vue';
+import SelectNodeType from './SelectNodeType.vue';
+import OperationEditor from './operation/OperationEditor.vue';
+import DeclarationEditor from './declaration/DeclarationEditor.vue';
+import InputEditor from './input/InputEditor.vue';
+import OutputEditor from './output/OutputEditor.vue';
+import { NodeType } from '@/enum';
+
+export default defineComponent({
   name: 'CharEditor',
-  components: { ContextMenu, SelectNodeType, OperationEditor, DeclarationEditor, InputEditor, OutputEditor },
+  components: {
+    ContextMenu,
+    SelectNodeType,
+    OperationEditor,
+    DeclarationEditor,
+    InputEditor,
+    OutputEditor
+  },
   data() {
     return {
-      graph: null
-    }
+      graph: null as any
+    };
   },
   methods: {
-    showAddNode(data) {
-      this.$refs.selectNodeType1.show(data);
+    showAddNode(data: any) {
+      (this.$refs.selectNodeType1 as any).show(data);
     },
-    addNode(nodeType, data) {
+    addNode(nodeType: NodeType, data: { source: any; branchNo: number }) {
       const id = AntVGraph.getId(data.source);
       AntVGraph.addNode(nodeType, id, data.branchNo);
     },
-    showNodeMenu(ev) {
+    showNodeMenu(ev: any) {
       const item = ev.item;
-      let contextMenuItems = []
+      let contextMenuItems: Array<any> = []; // Properly type the array if possible
       if (AntVGraph.getNodeType(item).canEdit) {
         contextMenuItems.push({
           icon: "edit",
@@ -48,47 +57,49 @@ export default {
           click: () => {
             switch (AntVGraph.getNodeType(item)) {
               case NodeType.Declaration:
-                let variable=new Variable(item._cfg.id, VariableType.Number, "aaaa");
-                this.$refs.declarationEditor1.show(variable);
+                const variable = new Variable(item._cfg.id, VariableType.Number, "aaaa");
+                (this.$refs.declarationEditor1 as any).show(variable);
                 break;
             }
           }
-        }
-        );
+        });
       }
       switch (AntVGraph.getNodeType(item)) {
         case NodeType.Operation:
         case NodeType.Start:
+          contextMenuItems.push({
+            icon: 'plus',
+            text: 'اضافه کردن فرزند',
+            click: () => {
+              this.showAddNode({ source: item, branchNo: 0 });
+            }
+          });
+          break;
+        case NodeType.Condition:
           contextMenuItems.push(
             {
               icon: 'plus',
-              text: 'اضافه کردن فرزند',
+              text: 'اضافه کردن فرزند true',
               click: () => {
-                this.showAddNode({ source: item, branchNo: 0 })
+                this.showAddNode({ source: item, branchNo: 0 });
               }
-            });
-          break;
-        case NodeType.Condition:
-          contextMenuItems.push({
-            icon: 'plus',
-            text: 'اضافه کردن فرزند true',
-            click: () => {
-              this.showAddNode({ source: item, branchNo: 0 })
-            }
-          },
+            },
             {
               icon: 'plus',
               text: 'اضافه کردن فرزند false',
               click: () => {
-                this.showAddNode({ source: item, branchNo: 1 })
+                this.showAddNode({ source: item, branchNo: 1 });
               }
-            });
+            }
+          );
       }
-      this.$refs.contextMenu1.show(contextMenuItems, ev.clientX, ev.clientY)
+      (this.$refs.contextMenu1 as any).show(contextMenuItems, ev.clientX, ev.clientY);
     },
-    showEdgeMenu(ev) {
+    showEdgeMenu(ev: any) {
       const item = AntVGraph.getSourceOfEdge(ev.item);
-      const branchNo = AntVGraph.getEdges(item).filter(x => AntVGraph.getSourceOfEdge(x) == item).findIndex(x => x == ev.item);
+      const branchNo = AntVGraph.getEdges(item)
+        .filter((x: any) => AntVGraph.getSourceOfEdge(x) === item)
+        .findIndex((x: any) => x === ev.item);
       this.showAddNode({ source: item, branchNo: branchNo });
       return;
       let contextMenuItems = [
@@ -97,24 +108,25 @@ export default {
           text: 'اضافه کردن فرزند',
           divider: true,
           click: () => {
-            this.showAddNode({ source: item, branchNo: branchNo })
+            this.showAddNode({ source: item, branchNo: branchNo });
           }
         }
       ];
-      this.$refs.contextMenu1.show(contextMenuItems, ev.clientX, ev.clientY)
+      (this.$refs.contextMenu1 as any).show(contextMenuItems, ev.clientX, ev.clientY);
     },
-    saveDeclareation(data) {
+    saveDeclaration(data: any) {
       console.log('object :>> ', data);
     }
   },
   mounted() {
     AntVGraph.init('chart1');
-    this.addNode(NodeType.Declaration, { source: AntVGraph.getNodes()[0], branchNo: 0 })
+    this.addNode(NodeType.Declaration, { source: AntVGraph.getNodes()[0], branchNo: 0 });
     AntVGraph.graph.on('node:click', this.showNodeMenu);
     AntVGraph.graph.on('edge:click', this.showEdgeMenu);
   }
-}
-</script> 
+});
+</script>
+
 <style>
 .flow-nav {
   /* width: 800px;
