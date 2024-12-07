@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { VariableType } from './declaration/VariableType.ts';
+import { Variable } from './declaration/Variable.ts';
 import AntVGraph from "./ant-graph/AntVGraph.js";
 import ContextMenu from './ContextMenu.vue'
 import SelectNodeType from './SelectNodeType.vue'
@@ -46,7 +48,8 @@ export default {
           click: () => {
             switch (AntVGraph.getNodeType(item)) {
               case NodeType.Declaration:
-                this.$refs.declarationEditor1.show(item._cfg.id);
+                let variable=new Variable(item._cfg.id, VariableType.Number, "aaaa");
+                this.$refs.declarationEditor1.show(variable);
                 break;
             }
           }

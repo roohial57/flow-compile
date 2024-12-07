@@ -1,16 +1,14 @@
 
 import { VariableType } from './VariableType';
 
-class Variable {
-  type: VariableType; // Use the enum here
-  name: string;
+export class Variable {
+    Type: VariableType; // Use the enum here
+    Name: string;
+    Id: number;
+    constructor(id: number, type: VariableType, name: string) {
+        this.Type = type || VariableType.Number;
+        this.Name = name;
+        this.Id = id;
+    }
 
-  constructor(type: VariableType, name: string) {
-    this.type = type;
-    this.name = name;
-  }
-
-  getType(): string {
-    return this.type;
-  }
 }

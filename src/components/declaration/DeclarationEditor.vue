@@ -3,14 +3,14 @@
     <vs-popup class="holamundo" title="ویرایش" :active.sync="visible">
       Type:
       <v-select label="Select" :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"></v-select>
-      <select v-model="selectedType">
+      <select v-model="item.Type">
         <option v-for="option in VariableType" :value="option">
           {{ option }}
         </option>
       </select>
       <br />
       Name:
-      <input v-model="typeName" />
+      <input v-model="item.Name" />
       <br />
       <input type="button" value="Save" @click="save" />
     </vs-popup>
@@ -19,31 +19,30 @@
 
 <script>
 import { VariableType } from './VariableType.ts';
+import { Variable } from './Variable.ts';
 export default {
   name: 'operation',
   components: {},
   data() {
     return {
-      nodeId: null,
       VariableType,
       visible: false,
-      selectedType: VariableType.Number,
-      typeName: '',
+      item: new Variable()
     }
   },
   computed: {
   },
   methods: {
-    show(id) {
+    show(item) {
       this.visible = true;
-      this.nodeId = id;
+      this.item = item;
     },
     save() {
-      if (!this.typeName || !/^[A-Za-z][A-Za-z0-9_]*$/.test(this.typeName)) {
+      if (!this.item.Name || !/^[A-Za-z][A-Za-z0-9_]*$/.test(this.item.Name)) {
         alert("Variable name shuld beginn by alfabet and contain alfanumeric!");
         return;
       }
-      this.$emit("save", { nodeId: this.nodeId, selectedType: this.selectedType, typeName: this.typeName });
+      this.$emit("save", this.item);
       this.visible = false;
     }
   },
