@@ -4,7 +4,7 @@
       Type:
       <v-select label="Select" :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"></v-select>
       <select v-model="item.Type">
-        <option v-for="option in VariableType" :value="option">
+        <option v-for="option in VariableType" :key="option" :value="option">
           {{ option }}
         </option>
       </select>
@@ -17,37 +17,46 @@
   </div>
 </template>
 
-<script>
-import { VariableType } from './VariableType.ts';
-import { Variable } from './Variable.ts';
-export default {
-  name: 'operation',
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { VariableType } from './VariableType';
+import { Variable } from './Variable';
+
+export default defineComponent({
+  name: 'Operation',
   components: {},
   data() {
     return {
       VariableType,
-      visible: false,
-      item: new Variable()
-    }
+      visible: false as boolean,
+      item: new Variable(0,VariableType.Number,'') 
+    };
   },
   computed: {
   },
   methods: {
-    show(item) {
+    show(item: Variable) {
       this.visible = true;
       this.item = item;
     },
     save() {
+      // Type checking for item.Name ensures it exists and matches correct pattern
       if (!this.item.Name || !/^[A-Za-z][A-Za-z0-9_]*$/.test(this.item.Name)) {
-        alert("Variable name shuld beginn by alfabet and contain alfanumeric!");
+        alert('Variable name should begin with an alphabet and contain only alphanumeric characters and underscores!');
         return;
       }
-      this.$emit("save", this.item);
+
+      // Emit event with the type specified (inferred from parent usage or documentation)
+      this.$emit('save', this.item);
       this.visible = false;
     }
   },
   mounted() {
+    // Lifecycle hook
   }
-}
-</script> 
-<style></style>
+});
+</script>
+
+<style>
+/* Add your styles here */
+</style>
