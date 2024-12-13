@@ -1,12 +1,12 @@
 import G6 from '@antv/g6';
-import { NodeType } from '@/enum.js';
+import { NodeType } from '../AddNode/NodeType';
 import  './DeclarationNode.js';
 import  './InputNode.js';
 import  './OutputNode.js';
 
 
 export default {
-    graph: null,
+    graph: {},
     container: null,
     width: 0,
     height: 0,
@@ -157,6 +157,12 @@ export default {
                 break;
         }
         return edges;
+    },
+    onNodeClick(fn) {
+        this.graph.on('node:click', fn);
+    },
+    onEdgeClick(fn) {
+        this.graph.on('edge:click', fn);
     }
 }
 

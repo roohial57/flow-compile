@@ -11,17 +11,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import { VariableType } from './declaration/VariableType';
 import { Variable } from './declaration/Variable';
-import AntVGraph from "./ant-graph/AntVGraph";
+import Graph from "./graph/Graph";
 import ContextMenu from './ContextMenu.vue';
-import SelectNodeType from './SelectNodeType.vue';
+import SelectNodeType from './AddNode/SelectNodeType.vue';
 import OperationEditor from './operation/OperationEditor.vue';
 import DeclarationEditor from './declaration/DeclarationEditor.vue';
 import InputEditor from './input/InputEditor.vue';
 import OutputEditor from './output/OutputEditor.vue';
-import { NodeType } from '@/enum';
+import { NodeType } from './AddNode/NodeType';
 
 export default defineComponent({
   name: 'CharEditor',
@@ -42,20 +42,20 @@ export default defineComponent({
     showAddNode(data: any) {
       (this.$refs.selectNodeType1 as any).show(data);
     },
-    addNode(nodeType: NodeType, data: { source: any; branchNo: number }) {
-      const id = AntVGraph.getId(data.source);
-      AntVGraph.addNode(nodeType, id, data.branchNo);
+    addNode(nodeType: any, data: { source: any; branchNo: number }) {
+      const id = Graph.getId(data.source);
+      Graph.addNode(nodeType, id, data.branchNo);
     },
     showNodeMenu(ev: any) {
       const item = ev.item;
       let contextMenuItems: Array<any> = []; // Properly type the array if possible
-      if (AntVGraph.getNodeType(item).canEdit) {
+      if (Graph.getNodeType(item).canEdit) {
         contextMenuItems.push({
           icon: "edit",
           text: 'ویرایش',
           divider: true,
           click: () => {
-            switch (AntVGraph.getNodeType(item)) {
+            switch (Graph.getNodeType(item)) {
               case NodeType.Declaration:
                 const variable = new Variable(item._cfg.id, VariableType.Number, "aaaa");
                 (this.$refs.declarationEditor1 as any).show(variable);
@@ -64,7 +64,7 @@ export default defineComponent({
           }
         });
       }
-      switch (AntVGraph.getNodeType(item)) {
+      switch (Graph.getNodeType(item)) {
         case NodeType.Operation:
         case NodeType.Start:
           contextMenuItems.push({
@@ -96,9 +96,9 @@ export default defineComponent({
       (this.$refs.contextMenu1 as any).show(contextMenuItems, ev.clientX, ev.clientY);
     },
     showEdgeMenu(ev: any) {
-      const item = AntVGraph.getSourceOfEdge(ev.item);
-      const branchNo = AntVGraph.getEdges(item)
-        .filter((x: any) => AntVGraph.getSourceOfEdge(x) === item)
+      const item = Graph.getSourceOfEdge(ev.item);
+      const branchNo = Graph.getEdges(item)
+        .filter((x: any) => Graph.getSourceOfEdge(x) === item)
         .findIndex((x: any) => x === ev.item);
       this.showAddNode({ source: item, branchNo: branchNo });
       return;
@@ -119,10 +119,10 @@ export default defineComponent({
     }
   },
   mounted() {
-    AntVGraph.init('chart1');
-    this.addNode(NodeType.Declaration, { source: AntVGraph.getNodes()[0], branchNo: 0 });
-    AntVGraph.graph.on('node:click', this.showNodeMenu);
-    AntVGraph.graph.on('edge:click', this.showEdgeMenu);
+    Graph.init('chart1');
+    this.addNode(NodeType.Declaration, { source: Graph.getNodes()[0], branchNo: 0 });
+    Graph.onNodeClick(this.showNodeMenu);
+    Graph.onEdgeClick(this.showEdgeMenu);
   }
 });
 </script>

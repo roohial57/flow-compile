@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { NodeType } from '@/enum.js';
+import { NodeType } from '../AddNode/NodeType';
 export default {
   name: 'operation',
   components: {},
