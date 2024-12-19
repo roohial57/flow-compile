@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { NodeType } from '../AddNode/NodeType';
+import { NodeType } from '../add-node/NodeType';
 export default {
   name: 'operation',
   components: {},

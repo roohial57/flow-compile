@@ -29,15 +29,18 @@ export default defineComponent({
     return {
       VariableType,
       visible: false as boolean,
-      item: new Variable(0,VariableType.Number,'') 
+      id: 0 as Number,
+      item: new Variable(0, VariableType.Number, '')
     };
   },
   computed: {
   },
   methods: {
-    show(item: Variable) {
+    show(id: Number, item: Variable) {
       this.visible = true;
-      this.item = item;
+      this.id = id;
+      if (item)
+        this.item = item;
     },
     save() {
       // Type checking for item.Name ensures it exists and matches correct pattern
@@ -47,7 +50,7 @@ export default defineComponent({
       }
 
       // Emit event with the type specified (inferred from parent usage or documentation)
-      this.$emit('save', this.item);
+      this.$emit('save', this.id, this.item);
       this.visible = false;
     }
   },

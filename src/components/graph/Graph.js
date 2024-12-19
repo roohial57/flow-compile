@@ -1,8 +1,8 @@
 import G6 from '@antv/g6';
-import { NodeType } from '../AddNode/NodeType';
-import  './DeclarationNode.js';
-import  './InputNode.js';
-import  './OutputNode.js';
+import { NodeType } from '../add-node/NodeType.ts';
+import './DeclarationNode.js';
+import './InputNode.js';
+import './OutputNode.js';
 
 
 export default {
@@ -157,6 +157,16 @@ export default {
                 break;
         }
         return edges;
+    },
+    getNode(id) {
+        let node = data.nodes.find(x => x.id == id);
+        return node;
+    },
+    editNode(id, data) {
+        let node = data.nodes.find(x => x.id == id);
+        if (node) {
+            node.data = data;
+        }
     },
     onNodeClick(fn) {
         this.graph.on('node:click', fn);

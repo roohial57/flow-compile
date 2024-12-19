@@ -16,12 +16,12 @@ import { VariableType } from './declaration/VariableType';
 import { Variable } from './declaration/Variable';
 import Graph from "./graph/Graph";
 import ContextMenu from './ContextMenu.vue';
-import SelectNodeType from './AddNode/SelectNodeType.vue';
+import SelectNodeType from './add-node/SelectNodeType.vue';
 import OperationEditor from './operation/OperationEditor.vue';
 import DeclarationEditor from './declaration/DeclarationEditor.vue';
 import InputEditor from './input/InputEditor.vue';
 import OutputEditor from './output/OutputEditor.vue';
-import { NodeType } from './AddNode/NodeType';
+import { NodeType } from './add-node/NodeType';
 
 export default defineComponent({
   name: 'CharEditor',
@@ -57,8 +57,8 @@ export default defineComponent({
           click: () => {
             switch (Graph.getNodeType(item)) {
               case NodeType.Declaration:
-                const variable = new Variable(item._cfg.id, VariableType.Number, "aaaa");
-                (this.$refs.declarationEditor1 as any).show(variable);
+                let node = Graph.getNode(item._cfg.id);
+                (this.$refs.declarationEditor1 as any).show(node.id, node.data);
                 break;
             }
           }
@@ -114,8 +114,8 @@ export default defineComponent({
       ];
       (this.$refs.contextMenu1 as any).show(contextMenuItems, ev.clientX, ev.clientY);
     },
-    saveDeclaration(data: any) {
-      console.log('object :>> ', data);
+    saveDeclaration(id: Number, data: any) {
+      Graph.editNode(id, data);
     }
   },
   mounted() {
