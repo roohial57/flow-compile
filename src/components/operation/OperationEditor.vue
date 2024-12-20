@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { NodeType } from '../add-node/NodeType';
+import { NodeType } from '../graph/NodeType';
 export default {
   name: 'operation',
   components: {},

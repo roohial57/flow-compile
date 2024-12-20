@@ -8,7 +8,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { NodeType } from './NodeType';
+import { NodeType } from '../graph/NodeType';
 
 @Component
 export default class SelectNodeType extends Vue {

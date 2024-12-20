@@ -1,5 +1,5 @@
 
-import { NodeType } from '../add-node/NodeType';
+import { NodeType } from './NodeType';
 export interface Node {
     id: string;
     label: string;

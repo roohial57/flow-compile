@@ -1,5 +1,5 @@
 import G6 from '@antv/g6';
-import { NodeType } from '../add-node/NodeType';
+import { NodeType } from './NodeType';
 import './DeclarationNode';
 import './InputNode';
 import './OutputNode';

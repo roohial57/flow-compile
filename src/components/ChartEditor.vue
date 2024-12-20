@@ -21,7 +21,7 @@ import OperationEditor from './operation/OperationEditor.vue';
 import DeclarationEditor from './declaration/DeclarationEditor.vue';
 import InputEditor from './input/InputEditor.vue';
 import OutputEditor from './output/OutputEditor.vue';
-import { NodeType,NodeTypeDetails } from './add-node/NodeType';
+import { NodeType,NodeTypeDetails } from './graph/NodeType';
 
 export default defineComponent({
   name: 'CharEditor',
