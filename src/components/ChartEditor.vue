@@ -21,7 +21,7 @@ import OperationEditor from './operation/OperationEditor.vue';
 import DeclarationEditor from './declaration/DeclarationEditor.vue';
 import InputEditor from './input/InputEditor.vue';
 import OutputEditor from './output/OutputEditor.vue';
-import { NodeType } from './add-node/NodeType';
+import { NodeType,NodeTypeDetails } from './add-node/NodeType';
 
 export default defineComponent({
   name: 'CharEditor',
@@ -49,7 +49,7 @@ export default defineComponent({
     showNodeMenu(ev: any) {
       const item = ev.item;
       let contextMenuItems: Array<any> = []; // Properly type the array if possible
-      if (Graph.getNodeType(item).canEdit) {
+      if (NodeTypeDetails[Graph.getNodeType(item)].canEdit) {
         contextMenuItems.push({
           icon: "edit",
           text: 'ویرایش',
@@ -58,7 +58,7 @@ export default defineComponent({
             switch (Graph.getNodeType(item)) {
               case NodeType.Declaration:
                 let node = Graph.getNode(item._cfg.id);
-                (this.$refs.declarationEditor1 as any).show(node.id, node.data);
+                (this.$refs.declarationEditor1 as any).show(node!.id, node!.data);
                 break;
             }
           }
@@ -114,7 +114,7 @@ export default defineComponent({
       ];
       (this.$refs.contextMenu1 as any).show(contextMenuItems, ev.clientX, ev.clientY);
     },
-    saveDeclaration(id: Number, data: any) {
+    saveDeclaration(id: string, data: any) {
       Graph.editNode(id, data);
     }
   },
