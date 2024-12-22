@@ -5,6 +5,7 @@ import './InputNode';
 import './OutputNode';
 import { Edge } from './Edge';
 import { Node } from './Node';
+import { Variable } from '../declaration/Variable';
 
 interface GraphData {
     nodes: Node[];
@@ -23,7 +24,7 @@ interface Graph {
     getId: (item: any) => string;
     getSourceOfEdge: (edge: any) => any;
     getEdges: (node: any) => any;
-    getNodes: () => any;
+    getNodes: () => Node[];
     addNode: (nodeType: NodeType, parentId: string, branchNo: number | undefined, text?: string) => void;
     newNode: (nodeType: NodeType, newId: string, text?: string) => Node;
     newEdges: (nodeType: NodeType, newId: string, targetId: string) => Edge[];
@@ -127,8 +128,8 @@ const graphInstance: Graph = {
     getEdges(node: any): any {
         return node._cfg.edges;
     },
-    getNodes(): any {
-        return this.graph?.cfg.nodes;
+    getNodes(): any[] {
+        return this.data.nodes;
     },
     addNode(nodeType: NodeType, parentId: string, branchNo: number | undefined, text?: string): void {
         const node = this.data.nodes.find(x => x.id === parentId);
@@ -194,10 +195,10 @@ const graphInstance: Graph = {
     getNode(id: string): Node | null {
         return this.data.nodes.find(x => x.id === id) ?? null;
     },
-    editNode(id: string, data: any): void {
+    editNode(id: string, data: Variable): void {
         const node = this.data.nodes.find(x => x.id === id);
         if (node) {
-            Object.assign(node, data);
+            node.data = data;
         }
     },
     onNodeClick(fn: (evt: any) => void): void {

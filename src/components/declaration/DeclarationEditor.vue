@@ -29,18 +29,20 @@ export default defineComponent({
     return {
       VariableType,
       visible: false as boolean,
-      id: 0 as Number,
-      item: new Variable(0, VariableType.Number, '')
+      nodeId: 0 as Number,
+      item: new Variable(VariableType.Number, '')
     };
   },
   computed: {
   },
   methods: {
-    show(id: Number, item: Variable) {
+    show(nodeId: Number, item: Variable) {
       this.visible = true;
-      this.id = id;
+      this.nodeId = nodeId;
       if (item)
         this.item = item;
+      else
+        this.item = new Variable(VariableType.Number, '');
     },
     save() {
       // Type checking for item.Name ensures it exists and matches correct pattern
@@ -50,7 +52,7 @@ export default defineComponent({
       }
 
       // Emit event with the type specified (inferred from parent usage or documentation)
-      this.$emit('save', this.id, this.item);
+      this.$emit('save', this.nodeId, this.item);
       this.visible = false;
     }
   },

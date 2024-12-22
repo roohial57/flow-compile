@@ -42,9 +42,8 @@ export default defineComponent({
     showAddNode(data: any) {
       (this.$refs.selectNodeType1 as any).show(data);
     },
-    addNode(nodeType: any, data: { source: any; branchNo: number }) {
-      const id = Graph.getId(data.source);
-      Graph.addNode(nodeType, id, data.branchNo);
+    addNode(nodeType: any, data: { sourceId: string; branchNo: number }) {
+      Graph.addNode(nodeType, data.sourceId, data.branchNo);
     },
     showNodeMenu(ev: any) {
       const item = ev.item;
@@ -71,7 +70,7 @@ export default defineComponent({
             icon: 'plus',
             text: 'اضافه کردن فرزند',
             click: () => {
-              this.showAddNode({ source: item, branchNo: 0 });
+              this.showAddNode({ sourceId: item.id, branchNo: 0 });
             }
           });
           break;
@@ -81,14 +80,14 @@ export default defineComponent({
               icon: 'plus',
               text: 'اضافه کردن فرزند true',
               click: () => {
-                this.showAddNode({ source: item, branchNo: 0 });
+                this.showAddNode({ sourceId: item.id, branchNo: 0 });
               }
             },
             {
               icon: 'plus',
               text: 'اضافه کردن فرزند false',
               click: () => {
-                this.showAddNode({ source: item, branchNo: 1 });
+                this.showAddNode({ sourceId: item.id, branchNo: 1 });
               }
             }
           );
@@ -100,7 +99,7 @@ export default defineComponent({
       const branchNo = Graph.getEdges(item)
         .filter((x: any) => Graph.getSourceOfEdge(x) === item)
         .findIndex((x: any) => x === ev.item);
-      this.showAddNode({ source: item, branchNo: branchNo });
+      this.showAddNode({ sourceId: item.id, branchNo: branchNo });
       return;
       let contextMenuItems = [
         {
@@ -108,19 +107,19 @@ export default defineComponent({
           text: 'اضافه کردن فرزند',
           divider: true,
           click: () => {
-            this.showAddNode({ source: item, branchNo: branchNo });
+            this.showAddNode({ sourceId: item.id, branchNo: branchNo });
           }
         }
       ];
       (this.$refs.contextMenu1 as any).show(contextMenuItems, ev.clientX, ev.clientY);
     },
-    saveDeclaration(id: string, data: any) {
-      Graph.editNode(id, data);
+    saveDeclaration(nodeId: string, data: any) {
+      Graph.editNode(nodeId, data);
     }
   },
   mounted() {
     Graph.init('chart1');
-    this.addNode(NodeType.Declaration, { source: Graph.getNodes()[0], branchNo: 0 });
+    this.addNode(NodeType.Declaration, { sourceId: Graph.getNodes()[0].id, branchNo: 0 });
     Graph.onNodeClick(this.showNodeMenu);
     Graph.onEdgeClick(this.showEdgeMenu);
   }

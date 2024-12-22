@@ -1,18 +1,18 @@
 <template>
   <div>
     <vs-popup class="holamundo" title="Lorem ipsum dolor sit amet" :active.sync="visible">
-      <p v-for="(nodeType, index) of NodeType" :key="index" @click="select(nodeType)" v-if="nodeType.canAdd">{{
-        nodeType.title }}</p>
+      <p v-for="(item, index) of NodeTypeDetails" :key="index" @click="select(item.value)" v-if="item.canAdd">
+        {{ item.title }}</p>
     </vs-popup>
   </div>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { NodeType } from '../graph/NodeType';
+import { NodeType,NodeTypeDetails } from '../graph/NodeType';
 
 @Component
 export default class SelectNodeType extends Vue {
-  NodeType: any = NodeType;
+  NodeTypeDetails: any = NodeTypeDetails;
   visible: boolean = false;
   data: any = null;
 
